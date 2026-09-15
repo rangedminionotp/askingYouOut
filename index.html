@@ -8,6 +8,7 @@
   <title>POST /cole/date-request</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0d0c'/%3E%3Cpath d='M32 50S12 39 12 23c0-9 11-13 20-3 9-10 20-6 20 3 0 16-20 27-20 27Z' fill='%23ff9f43'/%3E%3Cpath d='m24 26-5 6 5 6M40 26l5 6-5 6' fill='none' stroke='%230b0d0c' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -23,9 +24,9 @@
         <div class="window-title">date-request.sh</div>
       </div>
       <div class="request">
-        <div class="route"><span class="method">POST</span><h1 id="request-title">/cole/date-request</h1></div>
+        <div class="route"><span class="method">POST</span><h1 id="request-title">/<span data-recipient-slug>cole</span>/date-request</h1></div>
         <p class="comment">Awaiting one complete sentence from the boyfriend API.</p>
-        <pre aria-label="Date request JSON"><span class="punctuation">{</span>
+        <pre id="requestPayload" aria-label="Date request JSON"><span class="punctuation">{</span>
   <span class="key">"girlfriend"</span><span class="punctuation">:</span> <span class="hot">"hot"</span><span class="punctuation">,</span>
   <span class="key">"arrival"</span><span class="punctuation">:</span> <span class="punctuation">{</span>
     <span class="key">"date"</span><span class="punctuation">:</span> <span class="string">"Oct 16 2026"</span><span class="punctuation">,</span>
@@ -48,7 +49,7 @@
   <span class="punctuation">},</span>
   <span class="key">"compensation"</span><span class="punctuation">:</span> <span class="hot compensation-value" data-classified="&quot;classified&quot;">"🥵"</span>
 <span class="punctuation">}</span></pre>
-        <p class="prompt">Choose a response, Cole:</p>
+        <p class="prompt">Choose a response, <span data-recipient>Cole</span>:</p>
         <div class="actions" role="group" aria-label="Respond to date request">
           <a class="response-button" data-code="200" href="#">200 OK <small>yes, buy the tickets</small></a>
           <a class="response-button" data-code="409" href="#">409 Conflict <small>busy that weekend</small></a>
@@ -59,7 +60,7 @@
     </section>
     <footer>
       <span>A communication accessibility tool for men who cannot produce complete sentences.</span>
-      <span class="complete">complete_sentence: required</span>
+      <span class="complete">complete_sentence: required · <a href="builder.html">build another request</a></span>
     </footer>
   </main>
   <section class="emergency-overlay" aria-hidden="true" aria-label="Emergency approve mode">

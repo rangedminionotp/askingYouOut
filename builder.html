@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d0c">
+  <meta name="description" content="Build a reusable relationship API request.">
+  <title>Relationship API Request Builder</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0d0c'/%3E%3Cpath d='M32 50S12 39 12 23c0-9 11-13 20-3 9-10 20-6 20 3 0 16-20 27-20 27Z' fill='%23ff9f43'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="builder.js" defer></script>
+</head>
+<body class="builder-page">
+  <main class="builder-shell">
+    <header class="builder-header">
+      <div><p class="builder-kicker">relationship-api / request-builder</p><h1>Build a date request.</h1></div>
+      <a class="back-link" href="index.html">← current request</a>
+    </header>
+
+    <div class="builder-grid">
+      <form id="requestForm" class="builder-form">
+        <fieldset>
+          <legend>01 · People</legend>
+          <label>Recipient<input name="recipient" required autocomplete="off"></label>
+          <label>Girlfriend status<input name="girlfriend" autocomplete="off"></label>
+          <label>Compensation<input name="compensation" autocomplete="off"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>02 · Arrival</legend>
+          <label>Date<input name="arrivalDate" autocomplete="off"></label>
+          <label>Route<input name="arrivalRoute" autocomplete="off"></label>
+          <label>Time<input name="arrivalTime" autocomplete="off"></label>
+          <label>Flight<input name="arrivalFlight" autocomplete="off"></label>
+          <label>Pickup driver<input name="pickupDriver" autocomplete="off"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>03 · Date</legend>
+          <label>Date<input name="dateWhen" required autocomplete="off"></label>
+          <label>Event<input name="event" required autocomplete="off"></label>
+          <label class="wide">Plan <span>comma separated</span><input name="plan" required autocomplete="off"></label>
+          <label>Parking<input name="parking" autocomplete="off"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>04 · Departure</legend>
+          <label>Date<input name="departureDate" autocomplete="off"></label>
+          <label>Route<input name="departureRoute" autocomplete="off"></label>
+          <label>Time<input name="departureTime" autocomplete="off"></label>
+          <label>Flight<input name="departureFlight" autocomplete="off"></label>
+        </fieldset>
+
+        <div class="builder-actions">
+          <button class="generate-button" type="submit">Generate share link</button>
+          <button class="reset-button" type="button" id="resetBuilder">Reset to Cole template</button>
+        </div>
+        <div class="share-result" id="shareResult" aria-live="polite" hidden>
+          <p>Request compiled successfully.</p>
+          <div><input id="shareUrl" readonly aria-label="Generated share URL"><button type="button" id="copyUrl">Copy</button></div>
+          <a id="openRequest" target="_blank" rel="noopener">Open request ↗</a>
+        </div>
+      </form>
+
+      <aside class="builder-preview">
+        <div class="preview-bar"><span>LIVE PAYLOAD</span><span>valid JSON</span></div>
+        <pre id="builderPreview" aria-label="Live JSON preview"></pre>
+        <p>The configuration lives after <code>#</code> in the URL, so it is not sent to the hosting server.</p>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

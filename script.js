@@ -1,7 +1,69 @@
+function decodeSharedConfig() {
+  const encoded = new URLSearchParams(window.location.hash.slice(1)).get("request");
+  if (!encoded) return window.DATE_REQUEST_DEFAULTS;
+
+  try {
+    const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    const config = JSON.parse(new TextDecoder().decode(bytes));
+    const defaults = window.DATE_REQUEST_DEFAULTS;
+    if (typeof config.recipient !== "string" || typeof config.date?.event !== "string") {
+      throw new Error("Invalid request configuration");
+    }
+    return {
+      ...defaults,
+      ...config,
+      arrival: {
+        ...defaults.arrival,
+        ...config.arrival,
+        pickup: { ...defaults.arrival.pickup, ...config.arrival?.pickup },
+      },
+      date: {
+        ...defaults.date,
+        ...config.date,
+        plan: Array.isArray(config.date.plan) ? config.date.plan : defaults.date.plan,
+      },
+      departure: { ...defaults.departure, ...config.departure },
+    };
+  } catch {
+    return window.DATE_REQUEST_DEFAULTS;
+  }
+}
+
+function escapeHtml(value) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function highlightJson(value) {
+  const json = JSON.stringify(value, null, 2);
+  return json.replace(/("(?:\\.|[^"\\])*")(?=\s*:)|("(?:\\.|[^"\\])*")|\b(true|false|null)\b/g, (match, key, stringValue, literal) => {
+    const className = key ? "key" : literal ? "string" : "string";
+    return `<span class="${className}">${escapeHtml(match)}</span>`;
+  });
+}
+
+const requestConfig = decodeSharedConfig();
+const { recipient, ...requestPayload } = requestConfig;
+const recipientSlug = recipient.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-") || "partner";
+document.querySelector("[data-recipient-slug]").textContent = recipientSlug;
+document.querySelectorAll("[data-recipient]").forEach((node) => { node.textContent = recipient; });
+document.title = `POST /${recipientSlug}/date-request`;
+
+const payloadElement = document.querySelector("#requestPayload");
+payloadElement.innerHTML = highlightJson(requestPayload);
+const compensationToken = [...payloadElement.querySelectorAll(".string")]
+  .findLast((node) => node.textContent === JSON.stringify(requestConfig.compensation));
+if (compensationToken) {
+  compensationToken.classList.add("hot", "compensation-value");
+  compensationToken.dataset.classified = '"classified"';
+}
+
 const responses = {
   200: {
     text: "200 OK — Request accepted. Redirecting to cuddles…",
-    sms: "200 OK — Yes, buy the tickets. I’ll pick you up in Sacramento when your Frontier flight lands at 2:23 PM on Oct 16, then we’ll have dinner, see Max McNown, and spend the weekend cuddling. Compensation accepted 🥵",
+    sms: `200 OK — Approved. I’ll handle pickup after your ${requestConfig.arrival.route} flight on ${requestConfig.arrival.date} (${requestConfig.arrival.time}), and I’m in for ${requestConfig.date.plan.join(", ")}. Compensation accepted ${requestConfig.compensation}`,
     className: "",
   },
   409: {
